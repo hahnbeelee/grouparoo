@@ -1,0 +1,13 @@
+import { Config } from '@/config';
+
+export default function getAnalyticsConfig(config: Config) {
+  // If any values are in mint.json they override ALL injected values.
+  // For example, setting the apiKey for PostHog also overrides the apiHost.
+  return {
+    amplitude: config.analytics?.amplitude || config.__injected?.analytics?.amplitude,
+    fathom: config.analytics?.fathom || config.__injected?.analytics?.fathom,
+    hotjar: config.analytics?.hotjar || config.__injected?.analytics?.hotjar,
+    mixpanel: config.analytics?.mixpanel || config.__injected?.analytics?.mixpanel,
+    posthog: config.analytics?.posthog || config.__injected?.analytics?.posthog,
+  };
+}

@@ -80,7 +80,7 @@ export abstract class CommonModel<T> extends Model {
 
   idIsDefault(): boolean {
     const uuid = this.id.split("_").pop();
-    return this.id.startsWith(`${this.idPrefix()}_`) && validator.isUUID(uuid);
+    return this.id.startsWith(`${this.idPrefix()}_`) && uuid != null  && validator.isUUID(uuid);
   }
 
   abstract apiData(): Promise<{ [key: string]: any }>;
@@ -95,7 +95,8 @@ export abstract class CommonModel<T> extends Model {
     this: CommonModelStatic<T>,
     id: string
   ): Promise<T> {
-    const instance = await this.scope(null).findOne({ where: { id } });
+    let nully: undefined;
+    const instance = await this.scope(nully).findOne({ where: { id } });
     const modelName = String(this).match(/class\s(.+)\sextends/)?.[1] ?? "item"; // TODO: It looks like at this point `this` is the stringified representation of the constructor function, literally "class Group extends CommonModel..."
     if (!instance) throw new Error(`cannot find ${modelName} ${id}`);
     return instance;
@@ -109,7 +110,7 @@ export abstract class CommonModel<T> extends Model {
     instances: CommonModel<T>[],
     values: Partial<{ [key in keyof Attributes<T>]: T[key] }>
   ) {
-    const max = config.batchSize.internalWrite;
+    const max = config?.batchSize?.internalWrite;
     const ids = instances.map((i) => i.id);
     const queue = [...ids];
     while (queue.length > 0) {
@@ -126,7 +127,7 @@ export abstract class CommonModel<T> extends Model {
   public static async ensureUnique<
     T extends CommonModel<T> & { name?: string; key?: string; state?: string }
   >(this: CommonModelStatic<T>, instance: T) {
-    function getUniqueIdentifier(instance: T): (keyof T)[] {
+    function getUniqueIdentifier(instance: T): (keyof T)[] | undefined {
       if (instance?.uniqueIdentifier) {
         return instance.uniqueIdentifier as (keyof T)[];
       } else {
@@ -140,7 +141,7 @@ export abstract class CommonModel<T> extends Model {
 
     const instanceUniqueIdentifiers = getUniqueIdentifier(instance);
 
-    if (!instanceUniqueIdentifiers) {
+    if (instanceUniqueIdentifiers == null) {
       return;
     }
 
@@ -155,7 +156,7 @@ export abstract class CommonModel<T> extends Model {
           String(instance[identifier]).toLowerCase()
         );
       } else {
-        whereOpts[identifier] = instance[identifier];
+        whereOpts[identifier] = instance[identifier] as Where | WhereOperators | undefined;
       }
     });
 
@@ -171,7 +172,7 @@ export abstract class CommonModel<T> extends Model {
       // The unique key defaults to anything defined on the class, then name, then key.
       throw new Errors.UniqueError(
         instanceUniqueIdentifiers
-          .map((id) => `${id} "${instance[id]}" is already in use`)
+          .map((id) => `${String(id)} "${instance[id]}" is already in use`)
           .join(", ") + ` in table ${this.toString().split(" ")[1]}`,
         this.toString().split(" ")[1],
         instanceUniqueIdentifiers as string[],

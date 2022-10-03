@@ -13,10 +13,27 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true,
     "incremental": true
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "./src/index.d.ts",
+    "**/*.tsx",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "next.config.js",
+    "prebuild/index.js",
+    "remark/withImportsInjected.js",
+    "rehype/withLinkRoles.js",
+    "tailwind.config.js"
+  ],
 }

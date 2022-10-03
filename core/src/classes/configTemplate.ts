@@ -5,7 +5,7 @@ import glob from "glob";
 import { ConfigWriter } from "../modules/configWriter";
 
 export interface ConfigTemplateParams {
-  id?: string;
+  id: string;
   [key: string]: string | number | boolean;
 }
 
@@ -34,7 +34,9 @@ export abstract class ConfigTemplate {
   parentId?: string;
 
   constructor() {
-    this.params = {};
+    this.params = {
+      id: 'tempId'
+    };
     this.inputs = {};
   }
 

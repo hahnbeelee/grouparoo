@@ -10,3 +10,5 @@ dump.rdb
 *.retry
 coverage
 .next/cache/*
+.next
+yarn.lock

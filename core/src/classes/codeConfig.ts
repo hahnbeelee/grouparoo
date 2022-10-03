@@ -263,7 +263,7 @@ export function getAutoBootstrappedProperty(
   const mappingValues = Object.values(sourceConfigObject["mapping"]);
   for (const value of mappingValues) {
     // If this source id == its mapped property's sourceId, we should bootstrap the property
-    const autoBootstrappedProperty: PropertyConfigurationObject =
+    const autoBootstrappedProperty: PropertyConfigurationObject | undefined =
       otherConfigObjects
         .filter((o): o is PropertyConfigurationObject => typeof o === "object") // TS Trick to mock a type guard
         .find(
@@ -331,14 +331,14 @@ export function validateConfigObjects(
     }
 
     const _class = cleanClass(configObject);
-    if (!idTypes[_class]) {
+    if (_class && !idTypes[_class]) {
       idTypes[_class] = [];
     }
-    if (idTypes[_class].includes(configObject.id)) {
+    if (_class && configObject.id && idTypes[_class].includes(configObject.id)) {
       errors.push(
         `Duplicate ID values found for ${configObject.id} of class ${_class}`
       );
-    } else {
+    } else if (_class && configObject?.id) {
       idTypes[_class].push(configObject.id);
     }
   }

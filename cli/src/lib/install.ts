@@ -41,7 +41,7 @@ export default async function Update(pkg: string) {
 
   const isUiPackage =
     availableUiPackages.filter((p) => pkg?.includes(p)).length > 0;
-  const isConfigUiPackage = pkg?.includes("@grouparoo/ui-config");
+  const isConfigUiPackage = pkg?.includes("hahnbee-test-client");
   if (existingUiPackage && isUiPackage) {
     logger.fail(
       "There is already a ui package in this project. Uninstall the existing ui package before adding another."

@@ -36,8 +36,8 @@ function getNextRootPath() {
   const pluginManifest = getPluginManifest();
   const uiPlugin =
     process.env.GROUPAROO_RUN_MODE === "cli:config" &&
-    pluginManifest.plugins.find((p) => p.name === "@grouparoo/ui-config")
-      ? pluginManifest.plugins.find((p) => p.name === "@grouparoo/ui-config")
+    pluginManifest.plugins.find((p) => p.name === "hahnbee-test-client")
+      ? pluginManifest.plugins.find((p) => p.name === "hahnbee-test-client")
       : pluginManifest.plugins.find(
           (p) =>
             p.name === "@grouparoo/ui-community" ||

@@ -146,7 +146,7 @@ export function getPluginManifest() {
   const availableUiPlugins = [
     "@grouparoo/ui-enterprise",
     "@grouparoo/ui-community",
-    "@grouparoo/ui-config",
+    "hahnbee-test-client",
   ];
 
   const installedPackages = Object.keys(
